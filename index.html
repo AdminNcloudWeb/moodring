@@ -105,18 +105,40 @@
     <div id="auth-overlay" class="auth-overlay" hidden>
       <div class="auth-card">
         <div class="auth-logo">💍</div>
-        <h2 class="auth-title">moodring</h2>
-        <p class="auth-sub">Sign in to sync your moods across devices.</p>
 
-        <input type="email" id="auth-email" placeholder="you@email.com" autocomplete="email" />
-        <input type="password" id="auth-password" placeholder="Password (6+ characters)" autocomplete="current-password" />
+        <!-- Sign-in panel -->
+        <div class="auth-panel" id="auth-panel-signin">
+          <h2 class="auth-title">Welcome back</h2>
+          <p class="auth-sub">Sign in to sync your moods across devices.</p>
 
-        <div class="auth-error" id="auth-error" hidden></div>
+          <input type="email" id="signin-email" placeholder="you@email.com" autocomplete="email" />
+          <input type="password" id="signin-password" placeholder="Password" autocomplete="current-password" />
 
-        <button class="btn primary auth-btn" id="auth-signin">Sign in</button>
-        <button class="btn ghost auth-btn" id="auth-signup">Create account</button>
-        <button class="btn link" id="auth-magic">Email me a magic link instead</button>
-        <button class="btn link" id="auth-skip">Continue without an account</button>
+          <div class="auth-error" id="signin-msg" hidden></div>
+
+          <button class="btn primary auth-btn" id="auth-signin">Sign in</button>
+          <button class="btn link" id="auth-magic">Email me a magic link instead</button>
+
+          <div class="auth-divider"><span>New to moodring?</span></div>
+          <button class="btn ghost auth-btn auth-nav" id="auth-goto-signup">Create an account →</button>
+
+          <button class="btn link" id="auth-skip">Continue without an account</button>
+        </div>
+
+        <!-- Create-account panel -->
+        <div class="auth-panel" id="auth-panel-signup" hidden>
+          <button class="btn link auth-back" id="auth-back">← Back</button>
+          <h2 class="auth-title">Create your account</h2>
+          <p class="auth-sub">Free, and syncs your moods across every device.</p>
+
+          <input type="email" id="signup-email" placeholder="you@email.com" autocomplete="email" />
+          <input type="password" id="signup-password" placeholder="Password (6+ characters)" autocomplete="new-password" />
+
+          <div class="auth-error" id="signup-msg" hidden></div>
+
+          <button class="btn primary auth-btn" id="auth-signup">Create account</button>
+          <button class="btn link" id="auth-goto-signin">Already have an account? Sign in</button>
+        </div>
 
         <p class="auth-config-warn" id="auth-config-warn" hidden>
           ⚠️ Supabase isn’t configured yet. Add your project URL and anon key in <code>config.js</code> to enable sync.

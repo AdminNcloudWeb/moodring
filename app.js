@@ -46,6 +46,7 @@
   // Auth / cloud-sync runtime handles (set up in initAuth)
   let supa = null;
   let session = null;
+  let authPanel = 'signin'; // which auth screen is showing: 'signin' | 'signup'
   let pushTimer = null;
 
   function defaultState() {
@@ -578,11 +579,32 @@
     });
   }
 
-  function showAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = false; authError(''); }
+  function showAuthOverlay() {
+    const o = $('#auth-overlay');
+    if (o) o.hidden = false;
+    showAuthPanel('signin');
+  }
   function hideAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = true; }
 
+  // Switch between the sign-in and create-account screens.
+  function showAuthPanel(name) {
+    authPanel = name === 'signup' ? 'signup' : 'signin';
+    const signin = $('#auth-panel-signin');
+    const signup = $('#auth-panel-signup');
+    if (signin) signin.hidden = authPanel !== 'signin';
+    if (signup) signup.hidden = authPanel !== 'signup';
+    authError(''); // clear any stale message when changing screens
+    const focus = $(authPanel === 'signup' ? '#signup-email' : '#signin-email');
+    if (focus) focus.focus();
+  }
+
+  // The message element belongs to whichever panel is currently visible.
+  function authMsgEl() {
+    return $(authPanel === 'signup' ? '#signup-msg' : '#signin-msg');
+  }
+
   function authError(msg) {
-    const el = $('#auth-error');
+    const el = authMsgEl();
     if (!el) return;
     el.textContent = msg || '';
     el.classList.remove('success');
@@ -590,7 +612,7 @@
   }
 
   function authNotice(msg) {
-    const el = $('#auth-error');
+    const el = authMsgEl();
     if (!el) return;
     el.textContent = msg || '';
     el.classList.add('success');
@@ -615,8 +637,8 @@
 
   async function signIn() {
     if (!requireSupa()) return;
-    const email = $('#auth-email').value.trim();
-    const password = $('#auth-password').value;
+    const email = $('#signin-email').value.trim();
+    const password = $('#signin-password').value;
     if (!email || !password) return authError('Enter your email and password.');
     authError('');
     await withAuthBusy($('#auth-signin'), 'Signing in…', async () => {
@@ -628,8 +650,8 @@
 
   async function signUp() {
     if (!requireSupa()) return;
-    const email = $('#auth-email').value.trim();
-    const password = $('#auth-password').value;
+    const email = $('#signup-email').value.trim();
+    const password = $('#signup-password').value;
     if (!email || password.length < 6) return authError('Enter an email and a 6+ character password.');
     authError('');
     await withAuthBusy($('#auth-signup'), 'Creating account…', async () => {
@@ -645,7 +667,7 @@
 
   async function magicLink() {
     if (!requireSupa()) return;
-    const email = $('#auth-email').value.trim();
+    const email = $('#signin-email').value.trim();
     if (!email) return authError('Enter your email first.');
     authError('');
     await withAuthBusy($('#auth-magic'), 'Sending…', async () => {
@@ -771,7 +793,11 @@
     $('#auth-signup').addEventListener('click', signUp);
     $('#auth-magic').addEventListener('click', magicLink);
     $('#auth-skip').addEventListener('click', skipAuth);
-    $('#auth-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') signIn(); });
+    $('#auth-goto-signup').addEventListener('click', () => showAuthPanel('signup'));
+    $('#auth-goto-signin').addEventListener('click', () => showAuthPanel('signin'));
+    $('#auth-back').addEventListener('click', () => showAuthPanel('signin'));
+    $('#signin-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') signIn(); });
+    $('#signup-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') signUp(); });
     initAuth();
 
     // React to system theme changes when following system
