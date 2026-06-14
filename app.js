@@ -578,14 +578,34 @@
     });
   }
 
-  function showAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = false; }
+  function showAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = false; authError(''); }
   function hideAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = true; }
 
   function authError(msg) {
     const el = $('#auth-error');
     if (!el) return;
     el.textContent = msg || '';
+    el.classList.remove('success');
     el.hidden = !msg;
+  }
+
+  function authNotice(msg) {
+    const el = $('#auth-error');
+    if (!el) return;
+    el.textContent = msg || '';
+    el.classList.add('success');
+    el.hidden = !msg;
+  }
+
+  // Disable a button and show progress text while an async auth call runs.
+  async function withAuthBusy(btn, busyText, fn) {
+    const original = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = busyText; }
+    try {
+      return await fn();
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = original; }
+    }
   }
 
   function requireSupa() {
@@ -599,8 +619,11 @@
     const password = $('#auth-password').value;
     if (!email || !password) return authError('Enter your email and password.');
     authError('');
-    const { error } = await supa.auth.signInWithPassword({ email, password });
-    if (error) authError(error.message);
+    await withAuthBusy($('#auth-signin'), 'Signing in…', async () => {
+      const { error } = await supa.auth.signInWithPassword({ email, password });
+      if (error) authError(error.message);
+      // success → onAuthStateChange fires onSignedIn() and hides the overlay.
+    });
   }
 
   async function signUp() {
@@ -609,10 +632,15 @@
     const password = $('#auth-password').value;
     if (!email || password.length < 6) return authError('Enter an email and a 6+ character password.');
     authError('');
-    const { data, error } = await supa.auth.signUp({ email, password });
-    if (error) return authError(error.message);
-    if (data.session) return; // auto-confirm on → signed in via onAuthStateChange
-    toast('Check your email to confirm, then sign in.');
+    await withAuthBusy($('#auth-signup'), 'Creating account…', async () => {
+      const { data, error } = await supa.auth.signUp({ email, password });
+      if (error) return authError(error.message);
+      if (data.session) {
+        authNotice('Account created — signing you in…'); // auto-confirm → onAuthStateChange takes over
+      } else {
+        authNotice('Account created. Check ' + email + ' to confirm, then sign in.');
+      }
+    });
   }
 
   async function magicLink() {
@@ -620,11 +648,13 @@
     const email = $('#auth-email').value.trim();
     if (!email) return authError('Enter your email first.');
     authError('');
-    const { error } = await supa.auth.signInWithOtp({
-      email, options: { emailRedirectTo: window.location.href },
+    await withAuthBusy($('#auth-magic'), 'Sending…', async () => {
+      const { error } = await supa.auth.signInWithOtp({
+        email, options: { emailRedirectTo: window.location.href },
+      });
+      if (error) return authError(error.message);
+      authNotice('Magic link sent — check ' + email + '.');
     });
-    if (error) return authError(error.message);
-    toast('Magic link sent — check your email.');
   }
 
   async function signOut() {

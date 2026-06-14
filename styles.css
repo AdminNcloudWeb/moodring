@@ -147,7 +147,9 @@ body {
 .note-selected { font-size: 1.8rem; margin-bottom: 10px; }
 .note-actions { display: flex; gap: 10px; margin-top: 12px; justify-content: flex-end; }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   width: 100%;
   border: 1px solid var(--border);
   background: var(--bg);
@@ -156,9 +158,15 @@ input[type="text"] {
   padding: 12px 14px;
   font-size: 1rem;
   outline: none;
-  transition: border 0.2s ease;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
-input[type="text"]:focus { border-color: var(--accent); }
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+input::placeholder { color: var(--text-soft); opacity: 0.8; }
 
 /* Buttons */
 .btn {
@@ -190,7 +198,7 @@ input[type="text"]:focus { border-color: var(--accent); }
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 50;
+  z-index: 200; /* above the auth overlay (100) so toasts are never hidden */
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -371,8 +379,9 @@ input[type="text"]:focus { border-color: var(--accent); }
 .auth-logo { font-size: 2.6rem; }
 .auth-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
 .auth-sub { font-size: 0.9rem; color: var(--text-soft); margin-bottom: 6px; line-height: 1.5; }
-.auth-card input { text-align: left; }
+.auth-card input { text-align: left; margin-top: 2px; }
 .auth-btn { width: 100%; }
+.auth-btn:disabled { opacity: 0.6; cursor: default; }
 .auth-error {
   background: var(--accent-soft);
   color: var(--danger);
@@ -380,6 +389,11 @@ input[type="text"]:focus { border-color: var(--accent); }
   padding: 9px 12px;
   font-size: 0.85rem;
   text-align: left;
+  line-height: 1.45;
+}
+.auth-error.success {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .btn.link {
   background: none;
