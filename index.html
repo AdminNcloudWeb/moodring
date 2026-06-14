@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f0f12" />
+  <title>Moodring</title>
+  <meta name="description" content="A lightweight mood tracker. One tap to log how you feel." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="topbar">
+      <h1 class="brand">moodring</h1>
+      <div class="topbar-actions">
+        <button id="account-btn" class="icon-btn" aria-label="Account" title="Account" hidden>👤</button>
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">🌙</button>
+      </div>
+    </header>
+
+    <!-- Views -->
+    <main id="views">
+
+      <!-- ===== LOG VIEW ===== -->
+      <section id="view-log" class="view active" aria-label="Log your mood">
+        <p class="prompt" id="log-prompt">How are you feeling?</p>
+
+        <div class="emoji-row" id="emoji-row" role="listbox" aria-label="Mood options"></div>
+
+        <!-- Note input, hidden until an emoji is tapped -->
+        <div class="note-area" id="note-area" hidden>
+          <div class="note-selected" id="note-selected"></div>
+          <input type="text" id="note-input" maxlength="140" placeholder="Add a note (optional)…" autocomplete="off" />
+          <div class="note-actions">
+            <button class="btn ghost" id="note-skip">Skip</button>
+            <button class="btn primary" id="note-save">Save note</button>
+          </div>
+        </div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <!-- Today's logs preview -->
+        <div class="today-block">
+          <h2 class="section-title">Today</h2>
+          <div id="today-logs" class="today-logs"></div>
+        </div>
+      </section>
+
+      <!-- ===== HISTORY VIEW ===== -->
+      <section id="view-history" class="view" aria-label="History and patterns">
+        <h2 class="section-title">Last 7 days</h2>
+        <div class="trend" id="trend"></div>
+        <div class="summary-card" id="weekly-summary"></div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <!-- ===== BOOSTERS VIEW ===== -->
+      <section id="view-boosters" class="view" aria-label="Mood boosters">
+        <h2 class="section-title">Suggestions</h2>
+        <div class="suggestions" id="suggestions"></div>
+
+        <h2 class="section-title">Your boosters</h2>
+        <div class="booster-add">
+          <input type="text" id="booster-input" maxlength="80" placeholder="Add your own… e.g. go for a walk" autocomplete="off" />
+          <button class="btn primary" id="booster-add-btn">Add</button>
+        </div>
+        <ul class="booster-list" id="booster-list"></ul>
+      </section>
+
+      <!-- ===== SETTINGS VIEW ===== -->
+      <section id="view-settings" class="view" aria-label="Settings">
+        <h2 class="section-title">Your emojis</h2>
+        <p class="hint">Drag to reorder · tap ✕ to remove · 2–12 active.</p>
+        <ul class="emoji-edit-list" id="emoji-edit-list"></ul>
+
+        <div class="emoji-add">
+          <input type="text" id="emoji-add-char" class="emoji-char-input" maxlength="8" placeholder="🌈" />
+          <input type="text" id="emoji-add-label" maxlength="20" placeholder="Label" autocomplete="off" />
+          <button class="btn primary" id="emoji-add-btn">Add</button>
+        </div>
+
+        <h2 class="section-title">Data</h2>
+        <div class="data-actions">
+          <button class="btn ghost" id="export-json">Export JSON</button>
+          <button class="btn ghost" id="export-csv">Export CSV</button>
+          <button class="btn danger" id="reset-data">Reset all data</button>
+        </div>
+        <p class="hint">All data stays on this device (localStorage). Nothing is sent anywhere.</p>
+      </section>
+
+    </main>
+
+    <!-- Bottom navigation -->
+    <nav class="tabbar">
+      <button class="tab active" data-view="log">😊<span>Log</span></button>
+      <button class="tab" data-view="history">📈<span>History</span></button>
+      <button class="tab" data-view="boosters">✨<span>Boosters</span></button>
+      <button class="tab" data-view="settings">⚙️<span>Settings</span></button>
+    </nav>
+  </div>
+
+    <!-- ===== Auth overlay ===== -->
+    <div id="auth-overlay" class="auth-overlay" hidden>
+      <div class="auth-card">
+        <div class="auth-logo">💍</div>
+        <h2 class="auth-title">moodring</h2>
+        <p class="auth-sub">Sign in to sync your moods across devices.</p>
+
+        <input type="email" id="auth-email" placeholder="you@email.com" autocomplete="email" />
+        <input type="password" id="auth-password" placeholder="Password (6+ characters)" autocomplete="current-password" />
+
+        <div class="auth-error" id="auth-error" hidden></div>
+
+        <button class="btn primary auth-btn" id="auth-signin">Sign in</button>
+        <button class="btn ghost auth-btn" id="auth-signup">Create account</button>
+        <button class="btn link" id="auth-magic">Email me a magic link instead</button>
+        <button class="btn link" id="auth-skip">Continue without an account</button>
+
+        <p class="auth-config-warn" id="auth-config-warn" hidden>
+          ⚠️ Supabase isn’t configured yet. Add your project URL and anon key in <code>config.js</code> to enable sync.
+        </p>
+      </div>
+    </div>
+
+  <!-- Supabase client + app config + app logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

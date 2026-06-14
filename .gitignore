@@ -1,0 +1,13 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Vercel
+.vercel/
+
+# Note: config.js IS committed on purpose. The Supabase anon key is a public,
+# RLS-protected key meant for client-side use, and a static Vercel deploy has
+# no build step to inject env vars. Do not put secret/service keys in it.
