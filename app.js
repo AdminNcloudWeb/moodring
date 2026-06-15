@@ -583,8 +583,34 @@
     const o = $('#auth-overlay');
     if (o) o.hidden = false;
     showAuthPanel('signin');
+    startLogoCycle();
   }
-  function hideAuthOverlay() { const o = $('#auth-overlay'); if (o) o.hidden = true; }
+  function hideAuthOverlay() {
+    const o = $('#auth-overlay');
+    if (o) o.hidden = true;
+    stopLogoCycle();
+  }
+
+  // Cycle the auth logo through the mood spectrum (crisis → peak) so the brand
+  // mark reflects what the app is about. Runs only while the overlay is shown.
+  const LOGO_EMOJIS = ['😭', '😔', '😟', '😐', '😌', '🙂', '💪', '😊', '😄', '🤩'];
+  let logoTimer = null;
+  let logoIdx = 0;
+  function startLogoCycle() {
+    const el = $('#auth-logo');
+    if (!el || logoTimer) return;
+    logoTimer = setInterval(() => {
+      el.classList.add('swap');
+      setTimeout(() => {
+        logoIdx = (logoIdx + 1) % LOGO_EMOJIS.length;
+        el.textContent = LOGO_EMOJIS[logoIdx];
+        el.classList.remove('swap');
+      }, 180);
+    }, 1500);
+  }
+  function stopLogoCycle() {
+    if (logoTimer) { clearInterval(logoTimer); logoTimer = null; }
+  }
 
   // Switch between the sign-in and create-account screens.
   function showAuthPanel(name) {
@@ -686,7 +712,6 @@
     showAuthOverlay();
   }
 
-  function skipAuth() { hideAuthOverlay(); toast('Using local-only mode'); }
 
   function updateAccountButton() {
     const btn = $('#account-btn');
@@ -792,7 +817,6 @@
     $('#auth-signin').addEventListener('click', signIn);
     $('#auth-signup').addEventListener('click', signUp);
     $('#auth-magic').addEventListener('click', magicLink);
-    $('#auth-skip').addEventListener('click', skipAuth);
     $('#auth-goto-signup').addEventListener('click', () => showAuthPanel('signup'));
     $('#auth-goto-signin').addEventListener('click', () => showAuthPanel('signin'));
     $('#auth-back').addEventListener('click', () => showAuthPanel('signin'));

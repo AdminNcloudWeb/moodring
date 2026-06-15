@@ -92,7 +92,9 @@ to commit `config.js` and ship it to a static host.
   (`moodring_state`, one JSON row per user).
 - On sign-in, the cloud copy is pulled and adopted (enabling multi-device). A
   brand-new account is seeded with whatever was logged locally.
-- "Continue without an account" skips all of this and stays local-only.
+- When Supabase is configured, an account is required — the overlay asks users
+  to sign in or create one (no account-less mode). With no config, the app
+  falls back to local-only and the overlay is skipped entirely.
 
 ---
 

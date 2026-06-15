@@ -7,7 +7,7 @@
   <title>Moodring</title>
   <meta name="description" content="A lightweight mood tracker. One tap to log how you feel." />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😊</text></svg>" />
 </head>
 <body>
   <div id="app">
@@ -104,7 +104,7 @@
     <!-- ===== Auth overlay ===== -->
     <div id="auth-overlay" class="auth-overlay" hidden>
       <div class="auth-card">
-        <div class="auth-logo">💍</div>
+        <div class="auth-logo" id="auth-logo" aria-hidden="true">😊</div>
 
         <!-- Sign-in panel -->
         <div class="auth-panel" id="auth-panel-signin">
@@ -121,8 +121,6 @@
 
           <div class="auth-divider"><span>New to moodring?</span></div>
           <button class="btn ghost auth-btn auth-nav" id="auth-goto-signup">Create an account →</button>
-
-          <button class="btn link" id="auth-skip">Continue without an account</button>
         </div>
 
         <!-- Create-account panel -->
