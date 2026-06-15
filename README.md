@@ -42,12 +42,18 @@ cloud sync across devices.
 | **Accounts** — Supabase email/password + magic link | ✅ (Phase 2 pulled forward) |
 | **Cloud sync** — per-user state, local-first fallback | ✅ (Phase 2 pulled forward) |
 
+| **Installable PWA** — add to home screen, offline app shell | ✅ |
+| **Native iOS app + widget** — SwiftUI scaffold in [`ios/`](./ios) | ✅ (scaffold; build on a Mac) |
+
 ### Not in this phase (per brief)
 
-- Accounts / cloud sync (Phase 2)
-- Native mobile app + home-screen widget (Phase 2–3)
 - ML-based suggestions (currently rule-based)
 - Journaling, clinical/crisis tools, gamification, social — explicitly out of scope
+
+> **Installing on iPhone:** open the deployed site in Safari → Share → *Add to
+> Home Screen* for a full-screen, offline-capable app. For the real App Store
+> build (with a home-screen widget), see [`ios/README.md`](./ios/README.md) —
+> it shares this same Supabase backend.
 
 ---
 
