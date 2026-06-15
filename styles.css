@@ -224,6 +224,28 @@ input::placeholder { color: var(--text-soft); opacity: 0.8; }
 }
 .empty { color: var(--text-soft); font-size: 0.9rem; padding: 6px 0; }
 
+/* Today's boost */
+.boost-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: opacity 0.2s ease;
+}
+.boost-text { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
+.boost-actions { display: flex; gap: 10px; }
+.boost-btn { flex: 1; }
+.boost-card.done { border-color: var(--accent); }
+.boost-card.done .boost-text {
+  color: var(--text-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+}
+
 /* ===== History ===== */
 .trend {
   background: var(--surface);

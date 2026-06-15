@@ -56,6 +56,7 @@
       boosters: DEFAULT_BOOSTERS.map((text, i) => ({ id: 'b' + i, text })),
       dismissedSuggestions: [],
       savedSuggestions: [],
+      todayBoost: null,    // { date: <startOfDay ts>, id, done }
       theme: null,         // null = follow system
     };
   }
@@ -221,6 +222,68 @@
       </span>`).join('');
     wrap.querySelectorAll('.del').forEach((b) =>
       b.addEventListener('click', () => deleteLog(b.dataset.id)));
+  }
+
+  // ---------- Today's boost ----------
+  // Picks one booster for the day. Persists the choice so it's stable across
+  // reloads, and re-picks automatically on a new day or if the booster was
+  // deleted. Returns null when the user has no boosters.
+  function getTodayBoost() {
+    const today = startOfDay(Date.now());
+    const tb = state.todayBoost;
+    const valid = tb && tb.date === today && state.boosters.some((b) => b.id === tb.id);
+    if (valid) return tb;
+    if (!state.boosters.length) {
+      if (state.todayBoost) { state.todayBoost = null; save(); }
+      return null;
+    }
+    const pick = state.boosters[Math.floor(Math.random() * state.boosters.length)];
+    state.todayBoost = { date: today, id: pick.id, done: false };
+    save();
+    return state.todayBoost;
+  }
+
+  function renderTodayBoost() {
+    const wrap = $('#today-boost');
+    if (!wrap) return;
+    const tb = getTodayBoost();
+    if (!tb) {
+      wrap.innerHTML = '<p class="empty">No boosters yet — add one in the Boosters tab to get a daily pick.</p>';
+      return;
+    }
+    const booster = state.boosters.find((b) => b.id === tb.id);
+    const done = !!tb.done;
+    wrap.innerHTML = `
+      <div class="boost-card${done ? ' done' : ''}">
+        <div class="boost-text">${escapeHtml(booster.text)}</div>
+        <div class="boost-actions">
+          <button class="btn ghost boost-btn" id="boost-shuffle" title="Pick a different boost">🔀 Shuffle</button>
+          <button class="btn ${done ? 'ghost' : 'primary'} boost-btn" id="boost-done">${done ? '✓ Done today' : 'Mark done'}</button>
+        </div>
+      </div>`;
+    $('#boost-shuffle').addEventListener('click', shuffleTodayBoost);
+    $('#boost-done').addEventListener('click', toggleTodayBoostDone);
+  }
+
+  function shuffleTodayBoost() {
+    if (state.boosters.length < 2) { toast('Add more boosters to shuffle'); return; }
+    const today = startOfDay(Date.now());
+    const currentId = state.todayBoost && state.todayBoost.id;
+    const choices = state.boosters.filter((b) => b.id !== currentId);
+    const pick = choices[Math.floor(Math.random() * choices.length)];
+    state.todayBoost = { date: today, id: pick.id, done: false };
+    save();
+    renderTodayBoost();
+    toast('New boost for today');
+  }
+
+  function toggleTodayBoostDone() {
+    const tb = getTodayBoost();
+    if (!tb) return;
+    tb.done = !tb.done;
+    save();
+    renderTodayBoost();
+    toast(tb.done ? 'Nice — boost done 🎉' : 'Marked not done');
   }
 
   // ---------- History ----------
@@ -777,6 +840,7 @@
     $$('.view').forEach((v) => v.classList.remove('active'));
     $('#view-' + name).classList.add('active');
     $$('.tab').forEach((t) => t.classList.toggle('active', t.dataset.view === name));
+    if (name === 'log') renderTodayBoost();
     if (name === 'history') renderHistory();
     if (name === 'boosters') { renderSuggestions(); renderBoosters(); }
     if (name === 'settings') renderEmojiEditor();
@@ -786,6 +850,7 @@
   // ---------- Render everything ----------
   function renderAll() {
     renderEmojiRow();
+    renderTodayBoost();
     renderTodayLogs();
     renderBoosters();
     renderSuggestions();
