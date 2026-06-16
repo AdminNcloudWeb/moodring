@@ -195,8 +195,9 @@ extension View {
 struct PrimaryButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.body.weight(.semibold))
-            .padding(.vertical, 12)
+            .font(.subheadline.weight(.semibold))
+            .padding(.vertical, 11)
+            .padding(.horizontal, 18)
             .foregroundStyle(.white)
             .background(Palette.accent.opacity(configuration.isPressed ? 0.8 : 1))
             .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -206,8 +207,9 @@ struct PrimaryButton: ButtonStyle {
 struct GhostButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.body.weight(.semibold))
-            .padding(.vertical, 12)
+            .font(.subheadline.weight(.semibold))
+            .padding(.vertical, 11)
+            .padding(.horizontal, 18)
             .foregroundStyle(Palette.text)
             .background(Palette.surface2)
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(Palette.border, lineWidth: 1))

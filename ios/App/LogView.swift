@@ -57,16 +57,17 @@ struct LogView: View {
         if let tb = state.currentBoost, let text = state.boosterText(id: tb.id) {
             VStack(alignment: .leading, spacing: 14) {
                 Text(text)
-                    .font(.headline)
+                    .font(.title2.weight(.bold))
                     .strikethrough(tb.done, color: Palette.accent)
                     .foregroundStyle(tb.done ? Palette.textSoft : Palette.text)
-                HStack(spacing: 10) {
+                HStack(spacing: 8) {
+                    Spacer()
                     Button { state.shuffleBoost() } label: {
-                        Text("🔀 Shuffle").frame(maxWidth: .infinity)
-                    }.buttonStyle(GhostButton())
+                        Text("🔀")
+                    }.buttonStyle(BoostIconButton())
                     Button { state.toggleBoostDone() } label: {
-                        Text(tb.done ? "✓ Done today" : "Mark done").frame(maxWidth: .infinity)
-                    }.buttonStyle(tb.done ? AnyButtonStyle(GhostButton()) : AnyButtonStyle(PrimaryButton()))
+                        Text("✓")
+                    }.buttonStyle(BoostIconButton(done: tb.done))
                 }
             }
             .card()
@@ -139,11 +140,19 @@ extension Text {
     }
 }
 
-/// Type-erased ButtonStyle so the "done" button can swap styles inline.
-struct AnyButtonStyle: ButtonStyle {
-    private let makeBodyClosure: (Configuration) -> AnyView
-    init<S: ButtonStyle>(_ style: S) {
-        makeBodyClosure = { config in AnyView(style.makeBody(configuration: config)) }
+/// Compact round icon button for the boost actions (🔀 shuffle, ✓ done),
+/// mirroring `.boost-icon-btn` in styles.css. The check fills with the accent
+/// colour once the boost is marked done.
+struct BoostIconButton: ButtonStyle {
+    var done = false
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 18))
+            .frame(width: 40, height: 40)
+            .foregroundStyle(done ? Color.white : Palette.textSoft)
+            .background(done ? Palette.accent : Palette.surface2)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(done ? Palette.accent : Palette.border, lineWidth: 1))
+            .scaleEffect(configuration.isPressed ? 0.92 : 1)
     }
-    func makeBody(configuration: Configuration) -> some View { makeBodyClosure(configuration) }
 }
