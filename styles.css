@@ -236,9 +236,29 @@ input::placeholder { color: var(--text-soft); opacity: 0.8; }
   gap: 14px;
   transition: opacity 0.2s ease;
 }
-.boost-text { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
-.boost-actions { display: flex; gap: 10px; }
-.boost-btn { flex: 1; }
+.boost-text { font-size: 1.4rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
+.boost-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.boost-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-soft);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease, background 0.2s ease, color 0.2s ease;
+}
+.boost-icon-btn:active { transform: scale(0.92); }
+.boost-check.done {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
 .boost-card.done { border-color: var(--accent); }
 .boost-card.done .boost-text {
   color: var(--text-soft);

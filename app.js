@@ -257,8 +257,8 @@
       <div class="boost-card${done ? ' done' : ''}">
         <div class="boost-text">${escapeHtml(booster.text)}</div>
         <div class="boost-actions">
-          <button class="btn ghost boost-btn" id="boost-shuffle" title="Pick a different boost">🔀 Shuffle</button>
-          <button class="btn ${done ? 'ghost' : 'primary'} boost-btn" id="boost-done">${done ? '✓ Done today' : 'Mark done'}</button>
+          <button class="boost-icon-btn" id="boost-shuffle" title="Shuffle to a different boost" aria-label="Shuffle to a different boost">🔀</button>
+          <button class="boost-icon-btn boost-check${done ? ' done' : ''}" id="boost-done" title="${done ? 'Done today — tap to undo' : 'Mark done for today'}" aria-label="${done ? 'Mark not done' : 'Mark done for today'}">✓</button>
         </div>
       </div>`;
     $('#boost-shuffle').addEventListener('click', shuffleTodayBoost);
