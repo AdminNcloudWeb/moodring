@@ -14,4 +14,10 @@ enum Config {
     /// Add `moodring://login-callback` to Supabase → Authentication → URL
     /// Configuration → Redirect URLs for this to resolve back into the app.
     static let authRedirect = URL(string: "moodring://login-callback")!
+
+    /// Public web app — the native app links out to these pages rather than
+    /// duplicating the legal/support copy.
+    static let webBaseURL = URL(string: "https://moodring-rho.vercel.app")!
+    static let privacyURL = URL(string: "https://moodring-rho.vercel.app/privacy")!
+    static let contactURL = URL(string: "https://moodring-rho.vercel.app/contact")!
 }

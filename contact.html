@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#faf6f0" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)" />
+  <title>Contact &amp; Support · Moodring</title>
+  <meta name="description" content="Get in touch with Moodring — ask a question, report a bug, or share feedback." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😊</text></svg>" />
+  <!-- Match the in-app theme (light/dark) before paint to avoid a flash. -->
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('moodring.v1');
+        var theme = raw ? JSON.parse(raw).theme : null;
+        var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = theme === null || theme === undefined ? sysDark : theme === 'dark';
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <main class="page">
+    <div class="page-topbar">
+      <a class="page-back" href="/">← Back to Moodring</a>
+    </div>
+
+    <h1>Get in touch</h1>
+    <p class="updated">We'd love to hear from you</p>
+
+    <p class="lead">
+      Whether you've found a bug, have a question, or just want to share how
+      Moodring is working for you — drop a message below. Everything goes
+      straight to <strong>will@willpickles.co.uk</strong>.
+    </p>
+
+    <div class="page-card">
+      <form id="contact-form">
+        <div>
+          <label for="topic">What's this about?</label>
+          <select id="topic">
+            <option value="General enquiry">General enquiry</option>
+            <option value="Bug report">Report a bug</option>
+            <option value="Feedback / feature idea">Feedback or feature idea</option>
+            <option value="Account or privacy request">Account or privacy request</option>
+          </select>
+        </div>
+        <div>
+          <label for="reply-email">Your email <span style="font-weight:400">(so we can reply)</span></label>
+          <input type="email" id="reply-email" placeholder="you@email.com" autocomplete="email" />
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell us what's on your mind…"></textarea>
+        </div>
+        <button type="submit" class="btn primary auth-btn">Send message</button>
+      </form>
+      <p class="hint" id="form-note" style="margin-bottom:0">
+        This opens your email app with the message ready to send. Prefer to write
+        directly? Email
+        <a class="email-direct" href="mailto:will@willpickles.co.uk">will@willpickles.co.uk</a>.
+      </p>
+    </div>
+
+    <h2>Reporting a bug?</h2>
+    <p>
+      To help us fix things faster, it's useful to include:
+    </p>
+    <ul>
+      <li>What you were trying to do and what happened instead</li>
+      <li>The device and browser (or whether you're using the iOS app)</li>
+      <li>Anything that helps reproduce it</li>
+    </ul>
+
+    <footer class="page-footer">
+      <a href="/">Moodring</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/contact">Contact</a>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var TO = 'will@willpickles.co.uk';
+      var form = document.getElementById('contact-form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var topic = document.getElementById('topic').value;
+        var replyEmail = document.getElementById('reply-email').value.trim();
+        var message = document.getElementById('message').value.trim();
+
+        var subject = 'Moodring — ' + topic;
+        var bodyLines = [
+          message || '',
+          '',
+          '—',
+          replyEmail ? 'Reply to: ' + replyEmail : '',
+          'Sent from the Moodring contact page',
+        ];
+        var body = bodyLines.join('\n');
+
+        window.location.href =
+          'mailto:' + TO +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+      });
+    })();
+  </script>
+</body>
+</html>

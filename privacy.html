@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#faf6f0" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)" />
+  <title>Privacy Policy · Moodring</title>
+  <meta name="description" content="How Moodring handles your data. Short version: your moods stay on your device, and we don't sell or share anything." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😊</text></svg>" />
+  <!-- Match the in-app theme (light/dark) before paint to avoid a flash. -->
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('moodring.v1');
+        var theme = raw ? JSON.parse(raw).theme : null;
+        var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = theme === null || theme === undefined ? sysDark : theme === 'dark';
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <main class="page">
+    <div class="page-topbar">
+      <a class="page-back" href="/">← Back to Moodring</a>
+    </div>
+
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: 25 June 2026</p>
+
+    <p class="lead">
+      Moodring is a lightweight mood tracker built around one idea: log how you
+      feel with a single tap, with as little friction — and as little data
+      collection — as possible. This policy explains exactly what happens to your
+      information across every version of Moodring (the web app, the installable
+      PWA, and the native iOS app).
+    </p>
+
+    <h2>The short version</h2>
+    <ul>
+      <li>Your moods, notes, custom emojis and boosters are stored <strong>on your own device</strong> by default.</li>
+      <li>We don't sell, rent, or share your data with advertisers — ever.</li>
+      <li>There are no third-party trackers, ad networks, or analytics SDKs in the app.</li>
+      <li>An account is <strong>optional</strong>. You only have one if you choose to sync across devices.</li>
+      <li>You can export or permanently delete all of your data at any time.</li>
+    </ul>
+
+    <h2>What Moodring stores</h2>
+    <p>When you use Moodring, the app keeps the following so it can work:</p>
+    <ul>
+      <li><strong>Mood logs</strong> — the emoji you tapped and its automatic timestamp.</li>
+      <li><strong>Optional notes</strong> — the one-line note you may add to a log.</li>
+      <li><strong>Your customisations</strong> — your custom emoji set, your mood boosters, and saved suggestions.</li>
+      <li><strong>Preferences</strong> — such as your light/dark theme choice.</li>
+    </ul>
+    <p>
+      Moodring does not ask for your name, location, contacts, photos, or any
+      other personal information beyond an email address if you choose to create
+      an account.
+    </p>
+
+    <h2>Where your data lives</h2>
+    <p>
+      <strong>Local-first by default.</strong> If you use Moodring without an
+      account, everything above is saved only in your browser's
+      <code>localStorage</code> (web/PWA) or on-device storage (iOS). It never
+      leaves your device, and we cannot see it.
+    </p>
+    <p>
+      <strong>If you create an account (optional sync).</strong> To sync your
+      moods across devices, you can sign up with an email address and password,
+      or a magic email link. In that case your account email and your Moodring
+      data are stored on our hosting provider, <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase</a>,
+      which acts as our data processor. Your data is protected by per-user access
+      rules so that only your account can read or write your records. You can
+      sign out or delete your account at any time.
+    </p>
+
+    <h2>Service providers</h2>
+    <p>Moodring relies on a small number of providers purely to run the service:</p>
+    <ul>
+      <li><strong>Vercel</strong> — hosts and serves the web app. Like any web host, its servers process standard technical request logs (such as IP address and browser type) to deliver pages and protect against abuse.</li>
+      <li><strong>Supabase</strong> — stores accounts and synced data, only if you create an account.</li>
+      <li><strong>Apple App Store</strong> — if you install the iOS app, Apple's own terms and privacy policy also apply to the download and any platform-level data.</li>
+    </ul>
+    <p>We do not use advertising networks or third-party analytics or tracking tools.</p>
+
+    <h2>How your data is used</h2>
+    <p>
+      Your data is used only to provide the app's features to you — showing your
+      logs, drawing your history and gentle trend line, surfacing booster
+      suggestions, and syncing across your devices if you opted in. We do not use
+      your moods to build advertising profiles, and we do not sell or share them.
+    </p>
+
+    <h2>Your choices and rights</h2>
+    <ul>
+      <li><strong>Export</strong> — download all of your data as JSON or CSV from Settings.</li>
+      <li><strong>Delete</strong> — use "Reset all data" in Settings to permanently erase everything on your device. If you have an account, deleting your account removes your synced data too.</li>
+      <li><strong>Use without an account</strong> — you can use Moodring fully without ever signing up.</li>
+      <li><strong>Access &amp; correction</strong> — because you hold your own data, you can view and edit it directly in the app. For account-related requests, contact us below.</li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>
+      Moodring is not directed at children under 13 (or the minimum age required
+      in your country), and we do not knowingly collect data from them.
+    </p>
+
+    <h2>Mental health note</h2>
+    <p>
+      Moodring is a simple personal mood tracker, not a medical device or a
+      crisis service. It is not a substitute for professional help. If you are
+      struggling, please reach out to a qualified professional or a local crisis
+      line.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>
+      If we make material changes to this policy, we'll update the date at the top
+      of this page. Your continued use of Moodring after a change means you accept
+      the updated policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about your privacy, or want your account data deleted? Get in
+      touch via the <a href="/contact">contact page</a> or email
+      <a href="mailto:will@willpickles.co.uk">will@willpickles.co.uk</a>.
+    </p>
+
+    <footer class="page-footer">
+      <a href="/">Moodring</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/contact">Contact</a>
+    </footer>
+  </main>
+</body>
+</html>

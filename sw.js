@@ -4,10 +4,12 @@
  * job here is to cache the app shell so it launches with no network. Bump
  * CACHE_VERSION whenever a cached file changes to force an update.
  */
-const CACHE_VERSION = 'moodring-v3';
+const CACHE_VERSION = 'moodring-v4';
 const APP_SHELL = [
   './',
   './index.html',
+  './privacy.html',
+  './contact.html',
   './styles.css',
   './app.js',
   './config.js',

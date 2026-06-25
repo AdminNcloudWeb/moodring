@@ -15,6 +15,7 @@ struct SettingsView: View {
                 addEmojiSection
                 dataSection
                 accountSection
+                aboutSection
             }
             .scrollContentBackground(.hidden)
             .background(Palette.bg)
@@ -105,6 +106,15 @@ struct SettingsView: View {
                 HStack { ProgressView(); Text("Syncing…").foregroundStyle(Palette.textSoft) }
             }
             Button("Sign out", role: .destructive) { state.signOut() }
+        }
+    }
+
+    // MARK: About
+
+    private var aboutSection: some View {
+        Section("About") {
+            Link("Privacy policy", destination: Config.privacyURL)
+            Link("Contact & support", destination: Config.contactURL)
         }
     }
 }

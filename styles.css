@@ -493,3 +493,138 @@ input::placeholder { color: var(--text-soft); opacity: 0.8; }
   border-radius: 5px;
   font-size: 0.95em;
 }
+
+/* ===== Standalone pages (privacy, contact) ===== */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 18px 22px 64px;
+}
+.page-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 18px;
+}
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.page-back:hover { color: var(--accent); }
+.page h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 8px 0 6px;
+}
+.page .updated {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  margin-bottom: 28px;
+}
+.page h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 30px 0 10px;
+  letter-spacing: -0.01em;
+}
+.page p,
+.page li {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+.page p { margin: 0 0 14px; }
+.page ul { margin: 0 0 14px; padding-left: 22px; }
+.page li { margin-bottom: 6px; }
+.page a { color: var(--accent); }
+.page .lead {
+  font-size: 1.05rem;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.page-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+.page-card form { display: flex; flex-direction: column; gap: 12px; }
+.page-card label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  display: block;
+  margin-bottom: 6px;
+}
+.page-card textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+.page-card textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.page-card select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  outline: none;
+}
+.email-direct {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.page-footer {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page-footer a { color: var(--text-soft); text-decoration: none; }
+.page-footer a:hover { color: var(--accent); }
+
+/* In-app legal links (settings footer) */
+.app-legal {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.app-legal a {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  text-decoration: none;
+  font-weight: 600;
+}
+.app-legal a:hover { color: var(--accent); }
