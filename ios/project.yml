@@ -50,6 +50,7 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         ITSAppUsesNonExemptEncryption: false
+        NSFaceIDUsageDescription: Unlock Moodring with Face ID to keep your mood history private.
         CFBundleURLTypes:
           - CFBundleURLSchemes: [moodring]
     entitlements:

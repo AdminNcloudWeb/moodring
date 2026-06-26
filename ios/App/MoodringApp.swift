@@ -15,8 +15,18 @@ struct MoodringApp: App {
                     Task { await SupabaseService.shared.handle(url: url) }
                 }
         }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { state.reconcileFromSharedStore() }
+        .onChange(of: scenePhase) { oldPhase, phase in
+            switch phase {
+            case .active:
+                state.reconcileFromSharedStore()
+                // Only re-prompt on a genuine reopen (background → active), not
+                // the inactive ↔ active flicker the biometric sheet produces.
+                if oldPhase == .background { state.requestUnlockIfNeeded() }
+            case .background:
+                state.lockOnBackground()
+            default:
+                break
+            }
         }
     }
 }

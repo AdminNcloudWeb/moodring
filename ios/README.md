@@ -27,12 +27,14 @@ ios/
 │   ├── AppState.swift        # ObservableObject: state, sync, all actions
 │   ├── Analytics.swift       # trend / weekly summary / day bucketing
 │   ├── MoodringApp.swift     # @main
-│   ├── ContentView.swift     # tab bar + auth gating
+│   ├── ContentView.swift     # tab bar + auth gating + app-lock overlay
 │   ├── AuthView.swift        # sign-in / create-account screens + magic link
+│   ├── BiometricAuth.swift   # Face ID / Touch ID / passcode wrapper
+│   ├── LockView.swift        # app-lock screen (biometric unlock)
 │   ├── LogView.swift         # emoji grid, today's boost, today's logs
 │   ├── HistoryView.swift     # 7-day trend chart + weekly summary + timeline
 │   ├── BoostersView.swift    # boosters list + suggestion cards
-│   ├── SettingsView.swift    # emoji editor, theme, export, sign out, reset
+│   ├── SettingsView.swift    # emoji editor, theme, app lock, export, sign out, reset
 │   └── Assets.xcassets       # AppIcon (the smiley, 1024px)
 └── Widget/                  # widget extension
     ├── MoodringWidgetBundle.swift
@@ -73,6 +75,9 @@ If it didn't resolve automatically: **File → Add Package Dependencies →**
    group id. It must match `AppGroup.id` in `Shared/AppGroup.swift`
    (default `group.co.willpickles.moodring`). Update the string if you use your
    own group.
+4. App lock uses Face ID, so the app target needs an **`NSFaceIDUsageDescription`**
+   Info.plist string (XcodeGen adds it from `project.yml`; add it by hand if you
+   built the project manually). Touch ID and passcode need no extra key.
 
 ### 4. Supabase redirect (for magic links)
 In the Supabase dashboard → **Authentication → URL Configuration → Redirect

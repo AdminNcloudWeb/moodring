@@ -14,6 +14,7 @@ struct SettingsView: View {
                 emojiSection
                 addEmojiSection
                 dataSection
+                securitySection
                 accountSection
                 aboutSection
             }
@@ -93,6 +94,25 @@ struct SettingsView: View {
             Button("Delete everything", role: .destructive) { state.resetAll() }
             Button("Cancel", role: .cancel) {}
         }
+    }
+
+    // MARK: Security (app lock)
+
+    @ViewBuilder private var securitySection: some View {
+        if BiometricAuth.isAvailable {
+            Section {
+                Toggle(BiometricAuth.toggleLabel, isOn: appLockBinding)
+            } header: {
+                Text("Security")
+            } footer: {
+                Text("Require Face ID, Touch ID, or your passcode to open Moodring. Your moods stay locked when the app is closed.")
+                    .foregroundStyle(Palette.textSoft)
+            }
+        }
+    }
+
+    private var appLockBinding: Binding<Bool> {
+        Binding(get: { state.appLockEnabled }, set: { state.setAppLock(enabled: $0) })
     }
 
     // MARK: Account

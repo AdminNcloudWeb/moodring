@@ -14,12 +14,28 @@ final class AppState: ObservableObject {
     @Published var userEmail: String?
     @Published var syncing = false
 
+    /// Device-local app-lock preference (Face ID / Touch ID / passcode). Stored
+    /// per device, not synced — a lock only makes sense where it can be unlocked.
+    @Published var appLockEnabled: Bool {
+        didSet { AppGroup.defaults.set(appLockEnabled, forKey: Self.appLockKey) }
+    }
+    /// Whether the app is currently locked and waiting to be unlocked.
+    @Published var locked: Bool
+
+    private static let appLockKey = "moodring.appLockEnabled"
+
     private let store = SharedStore.shared
     private let service = SupabaseService.shared
     private var pushTask: Task<Void, Never>?
+    private var unlocking = false
 
     init() {
         data = store.load()
+        let lockPref = AppGroup.defaults.bool(forKey: Self.appLockKey)
+        appLockEnabled = lockPref
+        // Start locked when the preference is on, so a restored session never
+        // flashes content before the unlock prompt. Resolved by `observeAuth`.
+        locked = lockPref
         observeAuth()
     }
 
@@ -47,9 +63,66 @@ final class AppState: ObservableObject {
                 let signedIn = session != nil
                 let wasSignedIn = auth == .signedIn
                 auth = signedIn ? .signedIn : .signedOut
+
+                switch change.event {
+                case .signedIn:
+                    // Fresh interactive sign-in: the user just proved who they
+                    // are, so don't immediately demand a second unlock.
+                    locked = false
+                case .initialSession:
+                    // Session restored at launch: lock if the preference is on.
+                    locked = signedIn && appLockEnabled
+                case .signedOut:
+                    locked = false
+                default:
+                    break
+                }
+
                 if signedIn && !wasSignedIn { await pullRemote() }
             }
         }
+    }
+
+    // MARK: App lock
+
+    /// Turn app lock on/off. Enabling first requires a successful authentication
+    /// so we never lock the user out of a device they can't unlock.
+    func setAppLock(enabled: Bool) {
+        if enabled {
+            Task {
+                let ok = await BiometricAuth.authenticate(reason: "Enable app lock for Moodring")
+                if ok { appLockEnabled = true }
+            }
+        } else {
+            appLockEnabled = false
+            locked = false
+        }
+    }
+
+    /// Prompt for Face ID / Touch ID / passcode. Single-flight so overlapping
+    /// triggers (lock screen appearing + app returning to foreground) don't
+    /// stack multiple system prompts.
+    func unlock() async {
+        guard locked, !unlocking else { return }
+        unlocking = true
+        defer { unlocking = false }
+        if await BiometricAuth.authenticate(reason: "Unlock Moodring") {
+            locked = false
+        }
+    }
+
+    /// Re-lock when the app is sent to the background (if lock is enabled and
+    /// the user is signed in). Triggered from `.background`, not `.inactive`, so
+    /// the system biometric sheet doesn't cause a re-lock mid-unlock.
+    func lockOnBackground() {
+        if appLockEnabled && auth == .signedIn { locked = true }
+    }
+
+    /// Called when the app is reopened from the background — auto-prompt if it
+    /// came back locked.
+    func requestUnlockIfNeeded() {
+        guard appLockEnabled, auth == .signedIn, locked else { return }
+        Task { await unlock() }
     }
 
     /// Adopt the cloud copy on sign-in (multi-device), or seed the cloud from
